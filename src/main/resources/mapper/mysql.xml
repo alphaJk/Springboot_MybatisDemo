@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jk">
+    <select id="getMsgCount" resultType="Integer">
+        select count(*) from jk_test;
+
+    </select>
+
+    <insert id="addMsg" parameterType="com.jk.model.Msg">
+        insert into jk_test(id,uid,subject,views,replies,strCreatedAt,strTid,creat_time)
+        values (#{id},#{uid},#{subject},#{views},#{replies},#{strCreatedAt},#{strTid},#{creat_time})
+    </insert>
+
+    <update id="updateMsg" parameterType="com.jk.model.Msg">
+        update jk_test set subject=#{subject}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteMsg" parameterType="Integer">
+        delete from jk_test where id=#{id}
+    </delete>
+
+    <!--登录接口-->
+    <select id="login" parameterType="com.jk.model.User" resultType="Integer">
+        select count(*)from user
+        where username = #{username}
+        and password = #{password}
+    </select>
+
+
+    <!--添加用户接口-->
+    <insert id="addUser" parameterType="com.jk.model.User" >
+        insert into
+        user(username,password,sex,age,permission,isDel)
+        values
+        (#{username},#{password},#{sex},#{age},#{permission},#{isDel})
+    </insert>
+    <!--查询用户接口-->
+    <select id="getUserInfo" parameterType="com.jk.model.User" resultType="com.jk.model.User">
+        select * from user
+        <trim prefix="WHERE" prefixOverrides="and">
+            <if test="user_id != null and user_id !=''">
+                AND user_id = #{user_id}
+            </if>
+
+            <if test="username != null and username !=''">
+                AND username = #{username}
+            </if>
+            <if test="password != null and password !=''">
+                AND password = #{password}
+            </if>
+            <if test="sex != null and sex !=''">
+                AND sex = #{sex}
+            </if>
+            <if test="age != null and age !=''">
+                AND age = #{age}
+            </if>
+            <if test="permission != null and permission !=''">
+                AND permission = #{permission}
+            </if>
+            <if test="isDel != null and isDel !=''">
+                AND isDel = #{isDel}
+            </if>
+        </trim>
+    </select>
+
+    <!--修改、删除用户接口-->
+    <update id="updateUserInfo" parameterType="com.jk.model.User">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null and username !=''">
+                username = #{username},
+            </if>
+            <if test="password != null and password !=''">
+                password = #{password},
+            </if>
+            <if test="sex != null and sex !=''">
+                sex = #{sex},
+            </if>
+            <if test="age != null and age !=''">
+                age = #{age},
+            </if>
+            <if test="permission != null and permission !=''">
+                permission = #{permission},
+            </if>
+            <if test="isDel != null and isDel !=''">
+                isDel = #{isDel},
+            </if>
+        </trim>
+        where user_id = #{user_id}
+    </update>
+</mapper>
